@@ -1,7 +1,11 @@
 {
-  "outputDirectory": "./",
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "buildCommand": "echo 'No build step needed'",
+  "devCommand": "npx vercel dev",
+  "env": {
+    "FIGMA_TOKEN": "@figma_token",
+    "FIGMA_FILE_ID": "I1vDFEvLzUgdHWvWKnzUoh",
+    "FIGMA_TEAM_ID": "@figma_team_id",
+    "CLOUDINARY_CLOUD_NAME": "dskzix8yz",
+    "CLOUDINARY_PRESET": "webinar_banners"
+  }
 }

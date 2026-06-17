@@ -1,0 +1,8 @@
+{
+  "buildCommand": "echo 'No build step needed'",
+  "devCommand": "npx vercel dev",
+  "env": {
+    "FIGMA_TOKEN": "@figma_token",
+    "FIGMA_FILE_ID": "I1vDFEvLzUgdHWvWKnzUoh"
+  }
+}

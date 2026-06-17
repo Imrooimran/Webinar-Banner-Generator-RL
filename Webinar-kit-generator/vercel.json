@@ -1,8 +1,9 @@
 {
-  "buildCommand": "echo 'No build step needed'",
-  "devCommand": "npx vercel dev",
-  "env": {
-    "FIGMA_TOKEN": "@figma_token",
-    "FIGMA_FILE_ID": "I1vDFEvLzUgdHWvWKnzUoh"
-  }
+  "buildCommand": "echo 'No build needed'",
+  "devCommand": "echo 'No dev'",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

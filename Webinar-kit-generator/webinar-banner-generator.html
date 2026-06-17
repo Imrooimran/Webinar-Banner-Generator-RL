@@ -744,7 +744,7 @@ document.getElementById('syncFigma').onclick=async()=>{
   btn.textContent='Syncing…';
   try{
     const svg=buildNavSVG();
-    const res=await fetch('/api/sync-nav-banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgContent:svg,title:S.title,subtitle:S.subtitle,date:S.dateISO,time:S.time,language:S.language})});
+    const res=await fetch('https://webinar-banner-generator-rl.vercel.app/api/sync-nav-banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgContent:svg,title:S.title,subtitle:S.subtitle,date:S.dateISO,time:S.time,language:S.language})});
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Sync failed');
     btn.textContent='✓ Synced!';

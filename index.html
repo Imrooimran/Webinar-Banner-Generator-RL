@@ -305,8 +305,8 @@ function sqCell(i,o,showHost){const sp=S.speakers[i];
 function buildSquare(){const n=S.count,date=fmtDate(S.dateISO),time=esc(S.time);
   const top=`<div class="sq-top"><div class="toprow"><img src="${A.badge}" style="height:36px;width:auto"><div style="display:flex;align-items:center;gap:32px">${partnerLockup(52,44,'rgba(255,255,255,0.4)')}<img src="${A.logo}" style="height:43.542px;width:291.727px"></div></div>
     <div class="titleblock">${S.subtitle?`<div style="display:flex;flex-direction:column;gap:12px"><p class="sq-title ttl-fit" data-fs="64" data-ml="3">${nl2br(S.title)}</p><p class="sq-title ttl-fit" data-fs="40" data-ml="3" style="font-weight:400;opacity:.85">${nl2br(S.subtitle)}</p></div>`:`<p class="sq-title ttl-fit" data-fs="64" data-ml="4">${nl2br(S.title)}</p>`}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;width:100%"><div class="dt"><p>${date}</p><p>${time}</p>${langTag(22,'#fff')}</div>${S.ctaOn?`<div style="display:inline-flex;align-items:center;gap:8px;padding:14px 10px 14px 24px;border-radius:999px;background:rgba(255,255,255,.28);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.55);width:max-content;flex:none"><span style="font-weight:500;font-size:22px;color:#fff;white-space:nowrap">${esc(ctaText())}</span><span style="width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M10 6l6 6-6 6" fill="none" stroke="#0F62FE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>`:''}</div></div></div>`;
-  const O={1:{pw:280,ph:280,r:12,name:34,role:29,company:28,gap:16},2:{pw:180,ph:200,r:7.389,name:28,role:24,company:24,gap:16},
-    3:{pw:160,ph:160,r:5.911,name:22,role:18,company:24,gap:16},4:{pw:160,ph:160,r:5.911,name:22,role:18,company:22,gap:16}}[n];
+  const O={1:{pw:280,ph:280,r:12,name:34,role:26,company:28,gap:8},2:{pw:180,ph:200,r:7.389,name:28,role:22,company:24,gap:8},
+    3:{pw:160,ph:160,r:5.911,name:22,role:16,company:24,gap:8},4:{pw:160,ph:160,r:5.911,name:22,role:16,company:22,gap:8}}[n];
   let card;
   if(n===1)card=`<div class="sq-card" style="align-items:center;justify-content:center">${sqCell(0,O,true)}</div>`;
   else if(n===2)card=`<div class="sq-card" style="gap:32px;align-items:center;justify-content:center">${sqCell(0,O,true)}${sqCell(1,O,false)}</div>`;
@@ -524,8 +524,10 @@ function render(){
 if(_dbg){'HTML len:'+_html.length+' | host.innerHTML len:'+host.innerHTML.length+' | view.w:'+view.clientWidth+' | view.h:'+view.clientHeight+' | baseFit:'+baseFit().toFixed(4);}
   applyTitleFit(host);
   const p=PLACE[S.place];document.getElementById('ttl').firstChild.nodeValue=p.label;document.getElementById('dim').textContent=`${p.fw} × ${p.fh}`;
-  applyScale();requestAnimationFrame(applyScale);if(S.place==='nav')updateNavBannerId();}
-function generateNavBannerId(){const hash=(s)=>{let h=0;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h=((h<<5)-h)+c;h|=0;}return Math.abs(h).toString(36).toUpperCase().slice(0,8);};const data=[S.title,S.subtitle,S.dateISO,S.time,S.language,S.bgColor,S.bgColor2,S.count,S.speakers.map(sp=>sp.name).join(',')].join('|');return 'NAV-'+hash(data)+'-'+Date.now().toString(36).toUpperCase();}
+  const cap=document.querySelector('.cap');if(cap)cap.textContent=S.place==='nav'?'Send image with Nav banner ID to Samskriti agency':'Use the zoom to inspect text - export best in Chrome';
+  applyScale();requestAnimationFrame(applyScale);if(S.place==='nav')updateNavBannerId();
+}
+function generateNavBannerId(){const hash=(s)=>{let h=0;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h=((h<<5)-h)+c;h|=0;}return Math.abs(h).toString(36).toUpperCase().slice(0,8);};const data=[S.title,S.subtitle,S.dateISO,S.time,S.language,S.bgColor,S.bgColor2,S.count,S.speakers.map(sp=>sp.name).join(',')].join('|');return 'NAV-'+hash(data);}
 function updateNavBannerId(){if(S.place!=='nav')return;try{const idEl=document.getElementById('navBannerId');const idVal=generateNavBannerId();document.getElementById('navIdValue').textContent=idVal;idEl.style.display='block';}catch(e){console.error('Nav ID error:',e);}}
 async function syncNavBannerToSheets(){const SHEETS_URL='https://script.google.com/macros/s/AKfycbyby53mt93FT9uqtveHfdxAgzbNyGdl96cIVoCz-W4mj-BEj7H6w02J5JeL8N-4vcZU/exec';const image1=S.speakers[0]?.img||'no image';const image2=S.speakers[1]?.img||'no image';const payload={navBannerId:document.getElementById('navIdValue').textContent,image1:image1,image2:image2,title:S.title,subtitle:S.subtitle,date:fmtDate(S.dateISO),time:S.time,button:ctaText()};console.log('📊 Syncing to Sheets:',payload);try{const res=await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});console.log('✅ Sheets sync sent');}catch(e){console.error('❌ Sheets sync error:',e)}}
 new ResizeObserver(applyScale).observe(view);
@@ -545,8 +547,9 @@ async function toPNG(key){
   const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
   g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.fillStyle='#fff';g.fillRect(0,0,W,H);g.drawImage(img,0,0,W,H);
   return c.toDataURL('image/png');}
-async function dl(key){try{const data=await toPNG(key);const a=document.createElement('a');a.download=`rocketlane-${key}-${S.count}sp.png`;a.href=data;a.click();}catch(e){alert('Export failed — try Chrome. ('+e.message+')');}}
+async function dl(key){_autoSave();try{const data=await toPNG(key);const a=document.createElement('a');const navId=key==='nav'?`-${document.getElementById('navIdValue').textContent}`:'';a.download=`rocketlane-${key}${navId}-${S.count}sp.png`;a.href=data;a.click();}catch(e){alert('Export failed — try Chrome. ('+e.message+')');}}
 async function dlAll(){
+  _autoSave();
   const btn=document.getElementById('dlAll');
   btn.disabled=true;
   const PNG_KEYS=['sq','ls','post','exit','zud','nav','email'];
@@ -1200,9 +1203,13 @@ async function openProjectPage(proj,idx){
   _applyState(origSnap);
 }
 
+function _autoProjectName(){const now=new Date();const month=String(now.getMonth()+1).padStart(2,'0');const day=String(now.getDate()).padStart(2,'0');return `webinar-${now.getFullYear()}-${month}-${day}`;}
+function _autoSave(){const inp=document.getElementById('projName');if(!inp.value.trim()){inp.value=_autoProjectName();}
+document.getElementById('saveProject').onclick();}
 document.getElementById('saveProject').onclick=()=>{
   const inp=document.getElementById('projName');
-  const name=(inp.value.trim()||'Untitled project');
+  let name=inp.value.trim();
+  if(!name){name=_autoProjectName();inp.value=name;}
   const arr=loadProjects();
   const now=new Date();
   const dateStr=(now.getMonth()+1)+'/'+(now.getDate())+'/'+now.getFullYear().toString().slice(2);
